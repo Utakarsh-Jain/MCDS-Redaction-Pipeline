@@ -32,7 +32,8 @@ def invoke_sagemaker(
 ) -> dict[str, Any]:
     ct = content_type or os.environ.get("SAGEMAKER_CONTENT_TYPE", "application/json")
     ac = accept or os.environ.get("SAGEMAKER_ACCEPT", "application/json")
-    body = json.dumps({"text": text, "max_length": max_length})
+    # HF endpoints typically expect an "inputs" field.
+    body = json.dumps({"inputs": text})
 
     try:
         response = _client().invoke_endpoint(

@@ -13,7 +13,12 @@ if (Test-Path $Pkg) { Remove-Item -Recurse -Force $Pkg }
 if (Test-Path $Zip) { Remove-Item -Force $Zip }
 New-Item -ItemType Directory -Path $Pkg | Out-Null
 
-python -m pip install -r (Join-Path $LambdaDir "requirements.txt") -t $Pkg
+# Build for AWS Lambda Linux runtime even when packaging on Windows.
+python -m pip install -r (Join-Path $LambdaDir "requirements.txt") -t $Pkg `
+  --platform manylinux2014_x86_64 `
+  --implementation cp `
+  --python-version 3.12 `
+  --only-binary=:all:
 if ($LASTEXITCODE -ne 0) { throw "pip install failed" }
 
 Copy-Item (Join-Path $LambdaDir "redact_handler.py") $Pkg -Force

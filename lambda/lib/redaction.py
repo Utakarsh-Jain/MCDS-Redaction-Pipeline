@@ -38,18 +38,38 @@ def placeholder_for(entity_type: str) -> str:
     return mapping.get(t, f"[{t}]")
 
 
-def parse_entities(model_output: dict[str, Any]) -> list[EntitySpan]:
+def parse_entities(model_output: Any) -> list[EntitySpan]:
     """
-    Expects model JSON like:
-    {"entities": [{"start": 0, "end": 8, "type": "NAME"}, ...]}
+    Supports either:
+    1) {"entities": [{"start": 0, "end": 8, "type": "NAME"}, ...]}
+    2) Hugging Face token-classification output list, e.g.
+       [{"start": 0, "end": 8, "entity_group": "PER"}, ...]
     """
+    if isinstance(model_output, dict):
+        raw_items = model_output.get("entities", [])
+    elif isinstance(model_output, list):
+        raw_items = model_output
+    else:
+        raise TypeError("Unsupported model output type")
+
+    # Some model servers may wrap predictions in an extra list.
+    if raw_items and isinstance(raw_items[0], list):
+        raw_items = raw_items[0]
+
     entities: list[EntitySpan] = []
-    for item in model_output.get("entities", []):
+    for item in raw_items:
+        if not isinstance(item, dict):
+            continue
         entities.append(
             EntitySpan(
                 start=int(item["start"]),
                 end=int(item["end"]),
-                entity_type=str(item.get("type", "PII")),
+                entity_type=str(
+                    item.get("type")
+                    or item.get("entity_group")
+                    or item.get("entity")
+                    or "PII"
+                ),
             )
         )
     return entities
