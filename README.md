@@ -4,7 +4,7 @@ Data engineering scripts for CoNLL and OntoNotes datasets, plus a **production-o
 
 ---
 
-## 🚀 Quick Start — Local Web UI (Demo / Testing)
+## 🚀 Quick Start - Local Web UI (Demo / Testing)
 
 The fastest way to test the PII redaction pipeline locally **without any AWS/Azure credentials**:
 
