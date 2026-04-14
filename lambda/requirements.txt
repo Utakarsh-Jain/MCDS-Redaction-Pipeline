@@ -1,0 +1,3 @@
+# Boto3 is provided by the AWS Lambda Python runtime; pin only for local tests if needed.
+azure-core>=1.30.0,<2
+azure-storage-blob>=12.19.0,<13

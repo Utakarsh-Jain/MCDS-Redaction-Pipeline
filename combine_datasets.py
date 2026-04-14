@@ -2,8 +2,8 @@ from datasets import load_dataset, Dataset, concatenate_datasets
 
 print("Loading cached datasets...")
 # Step 1: Load both datasets [cite: 355]
-conll = load_dataset("conll2003")
-ontonotes = load_dataset("conll2012_ontonotesv5", "english_v12")
+conll = load_dataset("conll2003", trust_remote_code=True)
+ontonotes = load_dataset("conll2012_ontonotesv5", "english_v12", trust_remote_code=True)
 
 # Step 2: Define label mapping dictionaries [cite: 360]
 CONLL_ID_TO_UNIFIED = {

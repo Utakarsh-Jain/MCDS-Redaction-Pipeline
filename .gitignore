@@ -1,0 +1,18 @@
+# Lambda deployment artifacts
+lambda/package/
+lambda/deployment.zip
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform.lock.hcl
+terraform/*.auto.tfvars
+!terraform/terraform.tfvars.example
+
+# Python
+__pycache__/
+*.py[cod]
+.Python
+venv/
+.venv/

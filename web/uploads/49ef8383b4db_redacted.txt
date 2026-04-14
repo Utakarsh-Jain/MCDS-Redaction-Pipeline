@@ -1,0 +1,1155 @@
+
+
+Date: ORDINAL_1
+
+PERSON_1 3.0 Event Report
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: EVENT_1 Title OSSome Hacks CARDINAL_1
+ORG_1)
+ORG_2 (GCSRM)
+Date and Duration DATE_1, DATE_2 | TIME_1
+FAC_1, ORG_3, PERSON_2
+Type of Event National-PERSON_3 of Conduction Hybrid (Online Day 1 + Ofﬂine Day CARDINAL_2)
+PERSON_4 of Participants CARDINAL_3 Participants (~85 Teams)
+PERSON_5 ArmorIQ (Title Sponsor), ORG_4, CD ORG_5, .xyz, PERSON_6, PERSON_7 Pool ₹45,000
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_3) About LAW_1)
+OSSome Hacks 3.0 is a TIME_2 national-level hybrid hackathon organized by ORG_6
+
+SRM
+
+under
+
+the
+
+Networking
+
+and
+
+PERSON_10
+
+at
+
+ORG_7
+
+of
+
+PERSON_12
+
+and
+
+Technology,
+
+PERSON_2.
+
+The
+
+event
+
+aimed
+
+to
+
+empower
+
+developers
+
+and
+
+tech
+
+enthusiasts
+
+to
+
+collaborate
+
+on
+
+real-world
+
+problem
+
+statements
+
+using
+
+innovative
+
+tech
+
+stacks.
+
+With
+
+nearly
+
+CARDINAL_4
+
+teams
+
+and
+
+CARDINAL_3
+
+participants,
+
+the
+
+hackathon
+
+celebrated
+
+open-source
+
+development
+
+and
+
+provided
+
+a
+
+platform
+
+for
+
+impactful
+
+technological
+
+solutions.
+
+Industry
+
+experts
+
+from
+
+ArmorIQ
+
+and
+
+SpazorLabs
+
+served
+
+as
+
+judges
+
+for
+
+their
+
+respective
+
+tracks.
+
+CARDINAL_2) Participating Colleges:
+CARDINAL_5. ORG_8. ORG_9. ORG_10. ORG_11. ORG_12. ORG_13. ORG_14 (PERSON_13 and ORG_15
+campus)
+
+CARDINAL_6) PERSON_14
+● EVENT_2 of secure autonomous AI agents for
+ﬁnancial
+
+systems,
+
+focusing
+
+on
+
+intent
+
+enforcement,
+
+safe
+
+execution,
+
+and
+
+protection
+
+against
+
+adversarial
+
+inputs.
+● EVENT_3): PERSON_16 of high-impact AI/ML solutions
+across
+
+domains
+
+like
+
+healthcare,
+
+education,
+
+productivity,
+
+and
+
+sustainability,
+
+emphasizing
+
+real-world
+
+usability
+
+and
+
+measurable
+
+outcomes.
+
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_4) PERSON_17 and PERSON_18 1 – 3rd April 2026 (Online Phase): ● The hackathon commenced with ~85 teams in online mode, where
+teams
+
+submitted
+
+their
+
+initial
+
+progress
+
+for
+
+evaluation.
+● Unlike traditional hackathons, no teams were eliminated on DATE_5.
+PERSON_19,
+
+participants
+
+were
+
+awarded
+
+brownie
+
+points
+
+based
+
+on
+
+their
+
+submissions,
+
+encouraging
+
+innovation
+
+and
+
+early
+
+progress.
+● The ﬂexible format allowed teams to reﬁne their ideas and build
+momentum
+
+for
+
+the
+
+in-person
+
+round.
+Day 2 – 4th DATE_6 (ORG_16): ● The ofﬂine phase began with an opening ceremony at TIME_3,
+followed
+
+by
+
+the
+
+ofﬁcial
+
+kickoff
+
+at
+
+TIME_4.
+● Participants worked intensively throughout DATE_7, transforming ideas
+into
+
+fully
+
+functional
+
+solutions.
+● The judging process commenced after TIME_5 — projects were
+evaluated
+
+by
+
+judges
+
+from
+
+ArmorIQ
+
+and
+
+ORG_4
+
+based
+
+on
+
+innovation,
+
+execution,
+
+and
+
+real-world
+
+impact.
+● The ﬁnal review concluded with the announcement of winners, while all
+teams
+
+were
+
+appreciated
+
+for
+
+their
+
+creativity,
+
+technical
+
+excellence,
+
+and
+
+dedication.
+
+5)PERSON_20 ORG_17 PERSON_21 Track
+Industry Experts ArmorIQ ORG_18
+Industry Experts SpazorLabs Open Innovation (AI/ML)
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_8) PERSON_22 and Prize Distribution
+The total cash prize pool for ORG_19 HACKS 3.0 was ₹MONEY_1, distributed to
+top-performing
+
+teams
+
+across
+
+both
+
+tracks.
+
+PERSON_24
+Claw & Shield 1st Prize ₹20,000 + xyz domain
+ORG_18 2nd Prize ₹10,000 + xyz domain
+ORG_18 Honourable Mention Utho cloud CARDINAL_7 + xyz domain
+Open Innovation (AI/ML)
+ORDINAL_2 Prize ₹MONEY_2 + xyz domain
+Open Innovation (AI/ML)
+ORDINAL_3 Prize ₹5,000 + xyz domain
+Open Innovation (AI/ML)
+PERSON_25 cloud CARDINAL_7 + xyz domain
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_9) PERSON_26
+PERSON_1 3.0 saw participation from CARDINAL_3 participants across CARDINAL_8 teams,
+resulting
+
+in
+
+several
+
+innovative
+
+and
+
+impactful
+
+project
+
+outcomes
+
+across
+
+both
+
+tracks.
+
+The
+
+top
+
+CARDINAL_9
+
+teams
+
+from
+
+each
+
+track
+
+were
+
+recognized
+
+for
+
+their
+
+outstanding
+
+performance.
+
+Internship
+
+opportunities
+
+were
+
+also
+
+offered
+
+by
+
+ORG_4,
+
+giving
+
+participants
+
+valuable
+
+industry
+
+exposure.
+
+The
+
+event
+
+successfully
+
+fostered
+
+collaboration,
+
+innovation,
+
+and
+
+practical
+
+learning,
+
+encouraging
+
+real-world
+
+problem
+
+solving
+
+and
+
+technical
+
+excellence.
+
+8) Financial Statement
+● Total Prize Pool: ₹MONEY_1 ● External Sponsoring Agency: ArmorIQ (Title Sponsor), ORG_4, and other
+partners
+● Income through Registration: NIL ● PERSON_27 to University: NIL 9) Event Summary (For ORG_20)
+OSSome Hacks 3.0, organized by ORG_21 under the ORG_22 and
+ORG_23,
+
+was
+
+a
+
+TIME_6
+
+national
+
+level
+
+hybrid
+
+hackathon
+
+held
+
+on
+
+DATE_10
+
+and
+
+CARDINAL_10,
+
+DATE_2
+
+at
+
+FAC_2,
+
+SRMIST
+
+Kattankulathur.
+
+The
+
+event
+
+featured
+
+CARDINAL_11
+
+tracks,
+
+PERSON_28
+
+and
+
+PERSON_29
+
+focusing
+
+on
+
+AI
+
+security
+
+for
+
+ﬁnancial
+
+systems,
+
+and
+
+Open
+
+Innovation
+
+focusing
+
+on
+
+AI
+
+and
+
+ML.
+
+DATE_5 was conducted online with an incentive based evaluation system that
+encouraged
+
+teams
+
+to
+
+begin
+
+development
+
+early.
+
+Day
+
+CARDINAL_2
+
+consisted
+
+of
+
+an
+
+intensive
+
+ofﬂine
+
+coding
+
+and
+
+judging
+
+phase.
+
+Industry
+
+experts
+
+from
+
+ArmorIQ
+
+and
+
+SpazorLabs
+
+evaluated
+
+the
+
+projects
+
+based
+
+on
+
+innovation,
+
+execution,
+
+and
+
+real
+
+world
+
+impact.
+
+A
+
+prize
+
+pool
+
+of
+
+₹MONEY_1
+
+was
+
+awarded
+
+to
+
+the
+
+top
+
+teams,
+
+and
+
+SpazorLabs
+
+also
+
+offered
+
+internship
+
+opportunities.
+
+The event successfully bridged academic learning with industry expectations and
+encouraged
+
+innovative
+
+problem
+
+solving.
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_11) Participants
+Below is the list of participants as provided:
+PERSON_30 PERSON_31 PERSON_32 PERSON_37 S
+PERSON_40 V
+ORG_24
+PERSON_41 K H
+PERSON_42
+PERSON_43 PERSON_44
+PERSON_45
+PERSON_46
+PERSON_47 PERSON_48
+ORG_25
+PERSON_49PERSON_50
+ORG_26
+PERSON_51PERSON_52
+PERSON_53
+PERSON_54
+PERSON_55
+PERSON_56
+PERSON_57
+PERSON_58
+PERSON_59PERSON_60
+PERSON_61PERSON_62 devaraj
+PERSON_63
+PERSON_64
+PERSON_65
+PERSON_66
+PERSON_67 G P
+ORG_27
+PRIYAN R
+PERSON_68 A
+PERSON_69
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+PERSON_72
+PERSON_73
+GPE_1
+PERSON_74 PERSON_75
+ORG_28
+ORG_29
+ORG_30
+PERSON_76 P
+PERSON_77
+PERSON_78
+PERSON_79
+PERSON_80 jain
+PERSON_81PERSON_82PERSON_83 D
+NORP_1 R
+PERSON_84PERSON_85
+PERSON_86 PERSON_87
+PERSON_88
+PERSON_89 PERSON_90
+PERSON_91
+PERSON_92PERSON_93 PERSON_94
+A PERSON_95
+PERSON_96 G
+PERSON_97 P
+PERSON_98
+PERSON_99 PERSON_100
+PERSON_101
+PERSON_106PERSON_107 PERSON_108
+PERSON_112
+ORG_31
+PERSON_113
+PERSON_114 B
+PERSON_115
+PERSON_116
+PERSON_117
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+NORP_2 PERSON_118
+ORG_32
+PERSON_119 A M
+PERSON_120
+PERSON_121PERSON_122 PERSON_123
+PERSON_124
+PERSON_125
+PERSON_126 PERSON_127
+PERSON_128
+H R S ARUL
+PERSON_129
+PERSON_130 PERSON_131
+PERSON_132
+PERSON_133 PERSON_134 PERSON_135
+PERSON_136
+PERSON_137
+PERSON_138
+PERSON_139 A R
+PERSON_140
+PERSON_141 PERSON_142
+PERSON_143
+PERSON_144
+PERSON_145
+PERSON_146
+PERSON_147 K
+ORG_33
+PERSON_148
+PERSON_149 PERSON_150
+PERSON_151 H
+PERSON_152
+PERSON_157 U
+PERSON_158
+ORG_34
+PERSON_159 D
+PERSON_160 R
+PERSON_161 S
+ORG_35
+ORG_36
+PERSON_86 PERSON_162 PERSON_163
+ORG_37
+ORG_38
+PERSON_164
+PERSON_165
+PERSON_166
+PERSON_167
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+PERSON_170
+PERSON_171
+PERSON_172PERSON_173 PERSON_174
+PERSON_175
+PERSON_180
+PERSON_183
+PERSON_184
+PERSON_185PERSON_186
+PERSON_187
+PERSON_188PERSON_189 PERSON_163
+PERSON_190
+PERSON_191
+PERSON_192PERSON_193 DANIEL GILTON RAJASEKAR
+PERSON_194 T
+LOC_1
+PERSON_196 R
+ORG_39
+ORG_40
+PERSON_197
+PERSON_198 J
+Dibyansh PERSON_177
+PERSON_199
+PERSON_200
+PERSON_201 kumar PERSON_202
+PERSON_203
+PERSON_204
+PERSON_205
+PERSON_206
+FAC_3
+PERSON_207 A
+PERSON_208
+PERSON_209
+PERSON_210
+PERSON_211
+PRODUCT_1
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+PERSON_212
+ORG_41 R
+PERSON_213
+PERSON_214
+PERSON_215
+PERSON_216
+PERSON_217
+PERSON_218 V
+PERSON_219 P G
+ORG_42
+PERSON_223 PERSON_224
+NAMAN PERSON_225
+PERSON_226
+PERSON_227
+PERSON_228 PERSON_229
+PERSON_230 NORP_3
+PERSON_231 garg
+PERSON_232
+PERSON_233
+PERSON_234
+PERSON_235
+PERSON_236
+PERSON_237
+PERSON_238
+PERSON_239
+PERSON_240PERSON_241 PERSON_242 A
+PERSON_245
+ORG_43
+PERSON_246
+PERSON_247
+PERSON_248 D
+PERSON_249PERSON_250
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: ORDINAL_1
+PRODUCT_2
+PERSON_251
+PERSON_252 M P
+PERSON_254
+GPE_2
+PERSON_255PERSON_256PERSON_257
+FAC_4
+PERSON_258 PERSON_263
+PERSON_264PERSON_265
+
+
+
+11) Future Outlook
+The success of OSSome Hacks 3.0, with its increased participation and
+impactful
+
+projects,
+
+strengthens
+
+its
+
+position
+
+as
+
+a
+
+leading
+
+hackathon.
+
+GCSRM
+
+aims
+
+to
+
+continue
+
+hosting
+
+such
+
+events,
+
+inspiring
+
+students
+
+to
+
+innovate
+
+and
+
+address
+
+global
+
+challenges
+
+through
+
+open-source
+
+technology.
+
+
+
+
+
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_12) Photos From The Event:
+
+IMAGE CARDINAL_5 : Judges from ORG_4 evaluating projects in ORG_44) track at
+PERSON_267
+
+CARDINAL_1.
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+
+
+IMAGE 2 : Opening ceremony of PERSON_1 3.0.
+
+
+IMAGE CARDINAL_6 : Winners of both tracks at PERSON_1 3.0 during the prize distribution ceremony.
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: ORDINAL_1
+
+
+IMAGE
+
+CARDINAL_10
+
+:
+
+Judges
+
+from
+
+ArmorIQ
+
+evaluating
+
+projects
+
+during
+
+the
+
+judging
+
+phase
+
+of
+
+PERSON_267
+
+CARDINAL_1.
+
+
+
+
+
+
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: ORDINAL_1
+
+
+IMAGE
+
+CARDINAL_12
+
+:
+
+Participants
+
+actively
+
+coding
+
+during
+
+the
+
+ofﬂine
+
+round
+
+of
+
+PERSON_267
+
+CARDINAL_1.
+
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: 08/04/2026
+
+
+IMAGE 6 : ORG_45 at PERSON_1 3.0.
+
+
+
+
+
+
+githubsrmist.in |
+EMAIL_1
+
+
+
+
+Date: DATE_13) PERSON_268
+● Signature of Conveners / Co-Conveners:
+
+● Signature of HOD:
+
+
+githubsrmist.in |
+EMAIL_1
+

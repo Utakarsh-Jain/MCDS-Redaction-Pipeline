@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCDS PII Redaction Pipeline</title>
+    <meta name="description" content="Upload documents and automatically detect and redact PII using ML-powered NER">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-card-hover: rgba(30, 41, 59, 0.8);
+            --border: rgba(99, 102, 241, 0.15);
+            --border-hover: rgba(99, 102, 241, 0.4);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-1: #6366f1;
+            --accent-2: #8b5cf6;
+            --accent-3: #a78bfa;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+            --gradient-2: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --glow: 0 0 40px rgba(99, 102, 241, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(167, 139, 250, 0.03) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .bg-grid::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--accent-3);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        .header-badge .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--accent-1);
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone:hover::before, .upload-zone.drag-over::before {
+            opacity: 0.03;
+        }
+
+        .upload-zone * { position: relative; z-index: 1; }
+
+        .upload-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 1.25rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: transform 0.3s;
+        }
+
+        .upload-zone:hover .upload-icon { transform: scale(1.1) rotate(-3deg); }
+
+        .upload-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .upload-desc span {
+            color: var(--accent-3);
+            font-weight: 500;
+        }
+
+        #fileInput { display: none; }
+
+        /* Processing overlay */
+        .processing {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .processing.active { display: block; }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 3px solid rgba(99, 102, 241, 0.15);
+            border-top-color: var(--accent-1);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .processing-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .processing-sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Results */
+        .results {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        .results.active { display: block; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35); }
+
+        .btn-secondary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-3);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover { border-color: var(--border-hover); background: rgba(99, 102, 241, 0.15); }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            border: none;
+            background: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .tab.active {
+            background: var(--accent-1);
+            color: white;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .tab:hover:not(.active) { color: var(--text-secondary); }
+
+        /* Tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeUp 0.3s ease-out; }
+
+        /* Text panels */
+        .text-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .text-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .text-panel-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .text-panel-body {
+            padding: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .text-panel-body::-webkit-scrollbar { width: 6px; }
+        .text-panel-body::-webkit-scrollbar-track { background: transparent; }
+        .text-panel-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+        /* Comparison view */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .comparison { grid-template-columns: 1fr; }
+        }
+
+        /* Mapping table */
+        .mapping-table-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .mapping-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .mapping-table thead {
+            background: rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+        }
+
+        .mapping-table th {
+            padding: 0.85rem 1.25rem;
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mapping-table td {
+            padding: 0.7rem 1.25rem;
+            font-size: 0.83rem;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.05);
+            color: var(--text-secondary);
+        }
+
+        .mapping-table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        .mapping-table-body {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .pseudo-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
+
+        .type-PERSON .pseudo-badge { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+        .type-ORG .pseudo-badge { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+        .type-GPE .pseudo-badge, .type-LOC .pseudo-badge { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+        .type-EMAIL .pseudo-badge { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+        .type-PHONE .pseudo-badge, .type-SSN .pseudo-badge, .type-CREDIT_CARD .pseudo-badge { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+        .type-DATE .pseudo-badge, .type-TIME .pseudo-badge { background: rgba(14, 165, 233, 0.1); color: #38bdf8; }
+        .type-MONEY .pseudo-badge { background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+
+        .type-tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* Type tag colors */
+        .tag-PERSON { background: rgba(239, 68, 68, 0.12); color: #f87171; }
+        .tag-ORG { background: rgba(59, 130, 246, 0.12); color: #60a5fa; }
+        .tag-GPE, .tag-LOC { background: rgba(16, 185, 129, 0.12); color: #34d399; }
+        .tag-EMAIL { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
+        .tag-PHONE, .tag-SSN, .tag-CREDIT_CARD { background: rgba(168, 85, 247, 0.12); color: #c084fc; }
+        .tag-DATE, .tag-TIME { background: rgba(14, 165, 233, 0.12); color: #38bdf8; }
+        .tag-MONEY, .tag-CARDINAL, .tag-ORDINAL, .tag-PERCENT, .tag-QUANTITY { background: rgba(34, 197, 94, 0.12); color: #4ade80; }
+
+        .original-value {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Type Summary chips */
+        .type-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .type-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .type-chip-count {
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Search/Filter */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-input {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .filter-input:focus { border-color: var(--accent-1); }
+        .filter-input::placeholder { color: var(--text-muted); }
+
+        /* Error */
+        .error-msg {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            color: #fca5a5;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-msg.active { display: block; }
+
+        /* File name badge */
+        .file-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(99, 102, 241, 0.08);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-3);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Azure status banner */
+        .azure-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            font-size: 0.88rem;
+            border: 1px solid;
+        }
+
+        .azure-status.success {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+            color: #6ee7b7;
+        }
+
+        .azure-status.fail {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+        }
+
+        .azure-status.disabled {
+            background: rgba(100, 116, 139, 0.08);
+            border-color: rgba(100, 116, 139, 0.2);
+            color: var(--text-muted);
+        }
+
+        .azure-status-icon {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .azure-status-text {
+            flex: 1;
+        }
+
+        .azure-status-title {
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+
+        .azure-status-detail {
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0.8;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-badge">
+                <span class="dot"></span>
+                MCDS Redaction Pipeline
+            </div>
+            <h1>PII Redaction Engine</h1>
+            <p class="subtitle">
+                Upload a document and instantly detect & redact all personally identifiable information
+                using ML-powered Named Entity Recognition.
+            </p>
+        </header>
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📄</div>
+            <div class="upload-title">Drop your file here or click to browse</div>
+            <div class="upload-desc">
+                Supports <span>.pdf</span> and <span>.txt</span> files — up to 50 MB
+            </div>
+            <input type="file" id="fileInput" accept=".pdf,.txt,.csv,.md,.log">
+        </div>
+
+        <!-- Processing state -->
+        <div class="processing" id="processingState">
+            <div class="spinner"></div>
+            <div class="processing-text">Analyzing document for PII...</div>
+            <div class="processing-sub" id="processingSub">Running spaCy NER + heuristic detection</div>
+        </div>
+
+        <!-- Error -->
+        <div class="error-msg" id="errorMsg"></div>
+
+        <!-- Results -->
+        <div class="results" id="resultsSection">
+            <!-- Stats -->
+            <div class="stats-bar" id="statsBar"></div>
+
+            <!-- Azure upload status -->
+            <div id="azureStatus"></div>
+
+            <!-- Type chips -->
+            <div class="type-chips" id="typeChips"></div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button class="btn btn-primary" id="downloadBtn" onclick="downloadFile()">
+                    ⬇ Download Redacted File
+                </button>
+                <button class="btn btn-secondary" onclick="resetUI()">
+                    ↻ Upload Another File
+                </button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('comparison')">Side-by-Side</button>
+                <button class="tab" onclick="switchTab('redacted')">Redacted Text</button>
+                <button class="tab" onclick="switchTab('mapping')">PII Mapping</button>
+            </div>
+
+            <!-- Tab: Comparison -->
+            <div class="tab-content active" id="tab-comparison">
+                <div class="comparison">
+                    <div class="text-panel">
+                        <div class="text-panel-header">
+                            <div class="text-panel-title">🔓 Original Text</div>
+                            <div class="file-badge" id="fileBadgeLeft"></div>
+                        </div>
+                        <div class="text-panel-body" id="originalText"></div>
+                    </div>
+                    <div class="text-panel">
+                        <div class="text-panel-header">
+                            <div class="text-panel-title" style="color: var(--success)">🔒 Redacted Text</div>
+                            <div class="file-badge" id="fileBadgeRight">redacted_output.txt</div>
+                        </div>
+                        <div class="text-panel-body" id="redactedText"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Redacted Text (full) -->
+            <div class="tab-content" id="tab-redacted">
+                <div class="text-panel">
+                    <div class="text-panel-header">
+                        <div class="text-panel-title" style="color: var(--success)">🔒 Fully Redacted Output</div>
+                    </div>
+                    <div class="text-panel-body" id="redactedTextFull" style="max-height: 700px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab: PII Mapping -->
+            <div class="tab-content" id="tab-mapping">
+                <div class="filter-bar">
+                    <input class="filter-input" id="mappingSearch" placeholder="Search pseudonyms, types, or original values..." oninput="filterMapping()">
+                </div>
+                <div class="mapping-table-wrap">
+                    <div class="mapping-table-body" id="mappingTableBody">
+                        <table class="mapping-table">
+                            <thead>
+                                <tr>
+                                    <th>Pseudonym</th>
+                                    <th>Type</th>
+                                    <th>Original Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mappingTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentJobId = null;
+        let allMappings = [];
+
+        // === Upload handling ===
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        async function handleFile(file) {
+            // Reset
+            document.getElementById('errorMsg').classList.remove('active');
+            document.getElementById('resultsSection').classList.remove('active');
+            uploadZone.style.display = 'none';
+
+            // Show processing
+            const processing = document.getElementById('processingState');
+            processing.classList.add('active');
+
+            const steps = [
+                'Extracting text from document...',
+                'Running spaCy NER model (en_core_web_lg)...',
+                'Applying heuristic name detection...',
+                'Building pseudonym map...',
+                'Redacting PII spans...'
+            ];
+            let stepIdx = 0;
+            const stepInterval = setInterval(() => {
+                stepIdx = Math.min(stepIdx + 1, steps.length - 1);
+                document.getElementById('processingSub').textContent = steps[stepIdx];
+            }, 1500);
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const res = await fetch('/api/redact', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                clearInterval(stepInterval);
+                const data = await res.json();
+
+                if (!res.ok || data.error) {
+                    throw new Error(data.error || 'Server error');
+                }
+
+                currentJobId = data.job_id;
+                allMappings = data.mapping;
+
+                renderResults(data);
+
+            } catch (err) {
+                clearInterval(stepInterval);
+                const errorEl = document.getElementById('errorMsg');
+                errorEl.textContent = '❌ ' + err.message;
+                errorEl.classList.add('active');
+                uploadZone.style.display = '';
+            } finally {
+                processing.classList.remove('active');
+            }
+        }
+
+        // === Render results ===
+        function renderResults(data) {
+            document.getElementById('resultsSection').classList.add('active');
+
+            // Stats
+            const statsHtml = `
+                <div class="stat-card">
+                    <div class="stat-label">Entities Detected</div>
+                    <div class="stat-value">${data.entity_count}</div>
+                    <div class="stat-sub">${data.unique_pii_count} unique values</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Characters Redacted</div>
+                    <div class="stat-value">${data.original_length - data.redacted_length}</div>
+                    <div class="stat-sub">${data.original_length} → ${data.redacted_length} chars</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Processing Time</div>
+                    <div class="stat-value">${data.elapsed_seconds}s</div>
+                    <div class="stat-sub">spaCy + heuristics</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">PII Coverage</div>
+                    <div class="stat-value">${Math.round(((data.original_length - data.redacted_length) / data.original_length) * 100)}%</div>
+                    <div class="stat-sub">of text redacted</div>
+                </div>
+            `;
+            document.getElementById('statsBar').innerHTML = statsHtml;
+
+            // Type chips
+            let chipsHtml = '';
+            const sorted = Object.entries(data.type_counts).sort((a, b) => b[1] - a[1]);
+            for (const [type, count] of sorted) {
+                chipsHtml += `<div class="type-chip">
+                    <span class="type-tag tag-${type}">${type}</span>
+                    <span class="type-chip-count">${count}</span>
+                </div>`;
+            }
+            document.getElementById('typeChips').innerHTML = chipsHtml;
+
+            // Text panels
+            document.getElementById('originalText').textContent = data.original_text;
+            document.getElementById('redactedText').textContent = data.redacted_text;
+            document.getElementById('redactedTextFull').textContent = data.redacted_text;
+            document.getElementById('fileBadgeLeft').textContent = data.original_filename;
+
+            // Azure status
+            const azureEl = document.getElementById('azureStatus');
+            if (data.azure && data.azure.uploaded) {
+                azureEl.innerHTML = `
+                    <div class="azure-status success">
+                        <div class="azure-status-icon">&#9729;</div>
+                        <div class="azure-status-text">
+                            <div class="azure-status-title">Uploaded to Azure Blob Storage</div>
+                            <div class="azure-status-detail">
+                                ${data.azure.account} / ${data.azure.container} / ${data.azure.redacted_blob}
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (data.azure && !data.azure.uploaded) {
+                azureEl.innerHTML = `
+                    <div class="azure-status fail">
+                        <div class="azure-status-icon">&#9888;</div>
+                        <div class="azure-status-text">
+                            <div class="azure-status-title">Azure upload failed</div>
+                            <div class="azure-status-detail">${data.azure.error || 'Unknown error'}</div>
+                        </div>
+                    </div>`;
+            } else {
+                azureEl.innerHTML = `
+                    <div class="azure-status disabled">
+                        <div class="azure-status-icon">&#9729;</div>
+                        <div class="azure-status-text">
+                            <div class="azure-status-title">Azure not connected</div>
+                            <div class="azure-status-detail">File saved locally only</div>
+                        </div>
+                    </div>`;
+            }
+
+            // Mapping table
+            renderMappingTable(data.mapping);
+        }
+
+        function renderMappingTable(mappings) {
+            const tbody = document.getElementById('mappingTbody');
+            let html = '';
+            for (const m of mappings) {
+                const displayVal = m.original.length > 60 ? m.original.substring(0, 57) + '...' : m.original;
+                html += `<tr class="type-${m.type}">
+                    <td><span class="pseudo-badge">${m.pseudonym}</span></td>
+                    <td><span class="type-tag tag-${m.type}">${m.type}</span></td>
+                    <td class="original-value">${escapeHtml(displayVal)}</td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+
+        function filterMapping() {
+            const query = document.getElementById('mappingSearch').value.toLowerCase();
+            const filtered = allMappings.filter(m =>
+                m.pseudonym.toLowerCase().includes(query) ||
+                m.type.toLowerCase().includes(query) ||
+                m.original.toLowerCase().includes(query)
+            );
+            renderMappingTable(filtered);
+        }
+
+        // === Tab switching ===
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // === Download ===
+        function downloadFile() {
+            if (currentJobId) {
+                window.location.href = `/api/download/${currentJobId}`;
+            }
+        }
+
+        // === Reset ===
+        function resetUI() {
+            document.getElementById('resultsSection').classList.remove('active');
+            document.getElementById('errorMsg').classList.remove('active');
+            uploadZone.style.display = '';
+            fileInput.value = '';
+            currentJobId = null;
+        }
+
+        // === Helpers ===
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
